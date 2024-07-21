@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/goit-js-hw-11/",
+    "build": "vite build --base=/goit-js-hw-12/",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -13,7 +13,7 @@
     "vite": "^4.5.2"
   },
   "author": "Maciej Bratko <maciej.bratko@gmail.com>",
-  "description": "goit-js-hw-10",
+  "description": "goit-js-hw-12",
   "license": "ISC",
   "dependencies": {
     "flatpickr": "^4.6.13",
