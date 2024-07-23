@@ -1,16 +1,23 @@
+// Imports
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
 
+// DOM Content Loaded Event Listener
 document.addEventListener('DOMContentLoaded', () => {
+  // Variables
   let currentPage = 1;
   let totalHits = 0;
   const searchInput = document.querySelector('#searchBar');
   const searchButton = document.querySelector('button');
   const gallery = document.querySelector('#gallery');
+  const loader = document.querySelector('.loader');
+  const loaderShowMore = document.querySelector('.loader-showMore');
+  const showMoreButton = document.querySelector('#showMore');
 
+  // Lightbox Setup
   let lightbox = new SimpleLightbox('.gallery-link', {
     captionsData: 'alt',
     captionDelay: 250,
@@ -29,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Lightbox error:', e);
   });
 
+  // Toast Function
   const showIziToast = message => {
     iziToast.show({
       message,
@@ -42,9 +50,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  const loader = document.querySelector('.loader');
-  const loaderShowMore = document.querySelector('.loader-showMore');
+  // Helper Functions
+  const createImagePropertyElement = (className, labelText, valueText) => {
+    const li = document.createElement('li');
+    li.className = className;
 
+    const textSpan = document.createElement('span');
+    textSpan.className = `${className}Text`;
+    textSpan.textContent = labelText;
+
+    const valueSpan = document.createElement('span');
+    valueSpan.className = `${className}Value`;
+    valueSpan.textContent = valueText;
+
+    li.appendChild(textSpan);
+    li.appendChild(valueSpan);
+
+    return li;
+  };
+
+  // Main Function
   const fetchImages = async (page = 1) => {
     const query = searchInput.value.trim();
     if (!query) return;
@@ -77,24 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (page === 1) {
         gallery.innerHTML = '';
       }
-
-      const createImagePropertyElement = (className, labelText, valueText) => {
-        const li = document.createElement('li');
-        li.className = className;
-
-        const textSpan = document.createElement('span');
-        textSpan.className = `${className}Text`;
-        textSpan.textContent = labelText;
-
-        const valueSpan = document.createElement('span');
-        valueSpan.className = `${className}Value`;
-        valueSpan.textContent = valueText;
-
-        li.appendChild(textSpan);
-        li.appendChild(valueSpan);
-
-        return li;
-      };
 
       const imageElements = data.hits.map(
         ({
@@ -175,13 +182,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Event Listeners
   searchButton.addEventListener('click', event => {
     event.preventDefault();
     currentPage = 1;
     fetchImages(currentPage);
   });
-
-  const showMoreButton = document.querySelector('#showMore');
 
   showMoreButton.addEventListener('click', () => {
     currentPage++;
